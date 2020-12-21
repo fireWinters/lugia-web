@@ -61,7 +61,7 @@ const HBasePage = CSSComponent({
   css: css`
     text-align: center;
     width: 24px;
-    display: ${props => (props.arrowShow === false ? 'none' : 'flex')};
+    display: ${props => (props.arrowShow === false ? 'none' : '')};
   `,
 });
 
@@ -110,7 +110,6 @@ const HTabsContainer = CSSComponent({
     white-space: nowrap;
     overflow: hidden;
     float: left;
-    z-index: 5;
   `,
 });
 
@@ -213,7 +212,6 @@ const VTabsContainer = CSSComponent({
   },
   css: css`
     height: 100%;
-    width: 100%;
     box-sizing: border-box;
     white-space: nowrap;
     display: inline-block;
@@ -231,7 +229,6 @@ const YscrollerContainer = CSSComponent({
     selectNames: [],
   },
   css: css`
-    width: 100%;
     display: inline-block;
     box-sizing: border-box;
     white-space: nowrap;
@@ -284,9 +281,10 @@ const HTabsOutContainer = CSSComponent({
   },
   css: css`
     position: relative;
+    z-index: 99;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    clear: both;
   `,
 });
 
@@ -294,7 +292,7 @@ const VTabsOutContainer = CSSComponent({
   tag: 'div',
   className: 'TitleContainer',
   normal: {
-    selectNames: [['width'], ['height'], ['background']],
+    selectNames: [['height'], ['background']],
     getCSS(themeMeta, themeProps) {
       const { border = {} } = themeMeta;
       const { propsConfig: { tabPosition } = {} } = themeProps;
@@ -434,7 +432,9 @@ class TabHeader extends Component<TabsProps, TabsState> {
 
   componentDidUpdate(nextProps: Object, nextState: Object) {
     const { allowToCalc } = this.state;
-    if (allowToCalc) {
+    const { activityValue } = this.props;
+    const { activityValue: nextActivityValue } = nextProps;
+    if (allowToCalc || activityValue !== nextActivityValue) {
       this.matchPage();
     }
   }
@@ -453,11 +453,10 @@ class TabHeader extends Component<TabsProps, TabsState> {
   matchPage() {
     const titleSize = this.getTabpaneWidthOrHeight();
 
-    const { allowToCalc, maxIndex, data, activityValue } = this.state;
+    const { maxIndex, data, activityValue } = this.state;
     const newMaxIndex = maxIndex ? maxIndex : this.getCurrentMaxIndex(titleSize);
     let { currentPage } = this.state;
     const { tabPosition, pagedType } = this.props;
-    currentPage = pagedType === 'page' ? 1 : newMaxIndex;
     let offsetSize;
     if (isVertical(tabPosition)) {
       offsetSize = this.offsetHeight;
@@ -469,13 +468,14 @@ class TabHeader extends Component<TabsProps, TabsState> {
     if (arrowShow) {
       offsetSize = this.getScrollBoxSize(offsetSize);
     }
-    const totalPage = pagedType === 'page' ? computePage(offsetSize, actualSize) : titleSize.length;
-    if (allowToCalc) {
-      currentPage =
-        pagedType === 'page'
-          ? this.getCurrentPageByActivityValue(data, activityValue, totalPage)
-          : titleSize.length;
-    }
+    const isPageType = pagedType === 'page';
+    const totalPage = isPageType ? computePage(offsetSize, actualSize) : titleSize.length;
+    const newPage = this.getCurrentPageByActivityValue(data, activityValue, totalPage);
+    currentPage =
+      !isPageType && this.inSamePageRange({ newPage, oldPage: currentPage, maxIndex })
+        ? currentPage
+        : newPage;
+
     this.setState(
       { arrowShow, totalPage, currentPage, titleSize, allowToCalc: false, maxIndex: newMaxIndex },
       () => {
@@ -483,6 +483,11 @@ class TabHeader extends Component<TabsProps, TabsState> {
       }
     );
   }
+
+  inSamePageRange = (param: Object) => {
+    const { newPage, oldPage, maxIndex } = param;
+    return newPage < oldPage && newPage >= oldPage - maxIndex;
+  };
 
   getScrollBoxSize = (offsetSize: number) => {
     const { showAddBtn } = this.props;
@@ -947,7 +952,7 @@ class TabHeader extends Component<TabsProps, TabsState> {
       case 'single':
         const maxIndex = this.getCurrentMaxIndex(titleSize);
         const length = currentPage - maxIndex;
-        for (let i = 1; i <= length; i++) {
+        for (let i = 1; i < length; i++) {
           distance += titleSize[Math.min(maxIndex + i, titleSize.length - 1)];
         }
         break;

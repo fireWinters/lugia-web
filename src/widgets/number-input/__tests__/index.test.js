@@ -10,6 +10,7 @@ import Theme from '../../theme';
 import renderer from 'react-test-renderer';
 import chai from 'chai';
 import 'jest-styled-components';
+import { maxSafeNumber, minSafeNumber } from '../index';
 
 import {
   assertInputValue,
@@ -593,4 +594,55 @@ describe('NumberInput', () => {
     },
     { step: 5, max: 100, defaultValue: 10, min: 10 }
   );
+  it('props : value "."', () => {
+    const component = mount(<NumberInput />);
+    const inputComponent = getInputComponent(component);
+    inputComponent.value = '.';
+    expect(inputComponent.state.value).toBe('');
+  });
+  it(' onblur && max && below max number ', () => {
+    const component = mount(<NumberInput max={500} onBlur={() => {}} />);
+    const inputComponent = getInputComponent(component);
+    component.find('input').simulate('change', { target: { value: 555 } });
+    component.find('input').simulate('blur');
+    expect(inputComponent.state.value).toBe(500);
+  });
+  const maxLengthNumber = 1234567890123456;
+  it(' onblur && maxLengthNumber ', () => {
+    const component = mount(<NumberInput onBlur={() => {}} />);
+    const inputComponent = getInputComponent(component);
+    component.find('input').simulate('change', { target: { value: maxLengthNumber } });
+    component.find('input').simulate('blur');
+    expect(inputComponent.state.value).toBe(maxLengthNumber);
+  });
+  const overMaxLengthNumber = 12345678901234567;
+  it(' onblur && over maxLengthNumber ', () => {
+    const component = mount(<NumberInput onBlur={() => {}} />);
+    const inputComponent = getInputComponent(component);
+    component.find('input').simulate('change', { target: { value: overMaxLengthNumber } });
+    component.find('input').simulate('blur');
+    expect(inputComponent.state.value).toBe(maxSafeNumber);
+  });
+
+  it(' onblur && below minLengthNumber ', () => {
+    const component = mount(<NumberInput onBlur={() => {}} />);
+    const inputComponent = getInputComponent(component);
+    component.find('input').simulate('change', { target: { value: -overMaxLengthNumber } });
+    component.find('input').simulate('blur');
+    expect(inputComponent.state.value).toBe(minSafeNumber);
+  });
+  it(' onblur && min -100 ', () => {
+    const component = mount(<NumberInput onBlur={() => {}} min={-100} />);
+    const inputComponent = getInputComponent(component);
+    component.find('input').simulate('change', { target: { value: -200 } });
+    component.find('input').simulate('blur');
+    expect(inputComponent.state.value).toBe(-100);
+  });
+  it(' onblur && min below minLengthNumber ', () => {
+    const component = mount(<NumberInput onBlur={() => {}} />);
+    const inputComponent = getInputComponent(component);
+    component.find('input').simulate('change', { target: { value: -maxLengthNumber } });
+    component.find('input').simulate('blur');
+    expect(inputComponent.state.value).toBe(-maxLengthNumber);
+  });
 });

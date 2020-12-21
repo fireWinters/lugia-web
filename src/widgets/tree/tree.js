@@ -384,9 +384,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
       }
       return this.allExpandKeys;
     }
+    const newAllExpandKeys = this.allExpandKeys || [];
     return Array.from(
       new Set([
-        ...this.allExpandKeys.filter(item => item !== 'lugia_tree_root'),
+        ...newAllExpandKeys.filter(item => item !== 'lugia_tree_root'),
         ...Object.keys(id2ExtendInfo).filter(item => item !== 'lugia_tree_root'),
       ])
     );
@@ -480,7 +481,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   render() {
     const { props, state } = this;
-    const empty = <Empty themeProps={props.getPartOfThemeProps('Container')} />;
+    const empty = <Empty themeInfo={props.getPartOfThemeProps('Container')} />;
     const { __dontShowEmpty } = props;
     if (this.isEmpty(props) && !__dontShowEmpty) {
       return empty;

@@ -19,9 +19,23 @@ const ButtonDemo = styled(Button)`
 const ToolTipBaseWrapper = styled.div`
   display: inline-block;
 `;
-const OuterWarpper = styled.div`
+const OuterWrapper = styled.div`
   margin-left: 100px;
 `;
+const TestContainer = styled.div`
+  width: 200px;
+  position: relative;
+  height: 200px;
+  border: 1px red solid;
+  margin-left: 100px;
+`;
+const TestDiv = styled.div`
+  width: 50px;
+  height: 20px;
+  border: 1px blue solid;
+`;
+TestDiv.displayName = 'TestDiv';
+
 const DirectionTopWrapper = styled.div`
   margin-left: 120px;
   white-space: nowrap;
@@ -71,8 +85,18 @@ const childrenContainerConfig = {
     },
   },
 };
+const containerConfig = {
+  [Widget.Tooltip]: {
+    Container: {
+      normal: {
+        width: 120,
+        height: 50,
+      },
+    },
+  },
+};
 
-export default () => {
+export const Demo = () => {
   const config = {
     [Widget.Button]: {
       Container: {
@@ -83,7 +107,7 @@ export default () => {
     },
   };
   return (
-    <OuterWarpper>
+    <OuterWrapper>
       <Theme config={config}>
         <DirectionTopWrapper>
           <ToolTipTHWrapper>
@@ -174,6 +198,36 @@ export default () => {
           </Tooltip>
         </Theme>
       </div>
-    </OuterWarpper>
+      <div style={{ width: 100, height: 50 }}>
+        <Theme config={containerConfig}>
+          <Tooltip
+            title={'This is an English title that wants to wrap a line'}
+            action={'click'}
+            placement="top"
+          >
+            <ButtonDemo type="primary">英文 可换行的title</ButtonDemo>
+          </Tooltip>
+        </Theme>
+      </div>
+    </OuterWrapper>
   );
+};
+export const TestDemo = () => {
+  return (
+    <TestContainer>
+      <p>距左边距离不够弹窗时 在右边弹窗 箭头位于左边 </p>
+      <div>
+        <Tooltip
+          placement={'left'}
+          title={<div style={{ width: 100, height: 50 }}> this is title</div>}
+        >
+          <TestDiv>test</TestDiv>
+        </Tooltip>
+      </div>
+    </TestContainer>
+  );
+};
+
+export default () => {
+  return [<Demo />, <TestDemo />];
 };

@@ -10,11 +10,28 @@
         "data": [
           {
             "name": "标签区域",
-            "path": ["TagWrap"],
+            "path": ["Container"],
             "props": [{ "name": "text", "typeInTheme": "text" }],
             "description": {
               "appearancePart": { "text": "外观", "desc": "标签区域外观配置" },
               "textPart": { "text": "文本", "desc": "标签文本配置" }
+            }
+          },
+          {
+            "name": "前缀图标",
+            "path": ["PrefixIcon"],
+            "props": [{ "name": "prefixIcon", "typeInTheme": "icon" }],
+            "description": {
+              "textPart": { "text": "前缀图标", "desc": "前缀图标文本配置" }
+            }
+          },
+          {
+            "name": "后缀图标",
+            "path": ["SuffixIcon"],
+            "props": [{ "name": "suffixIcon", "typeInTheme": "icon" }],
+
+            "description": {
+              "textPart": { "text": "后缀图标", "desc": "后缀图标文本配置" }
             }
           }
         ]
@@ -34,7 +51,7 @@
         "data": [
           {
             "name": "标签区域",
-            "path": ["TagWrap"],
+            "path": ["Container"],
             "props": [{ "name": "text", "typeInTheme": "text" }],
             "description": {
               "appearancePart": { "text": "外观", "desc": "标签区域外观配置" },
@@ -48,6 +65,23 @@
             "description": {
               "spacingPart": { "text": "margin/padding", "desc": "关闭按钮内外边距配置区" },
               "textPart": { "text": "可关闭图标", "desc": "可关闭图标文本配置" }
+            }
+          },
+          {
+            "name": "前缀图标",
+            "path": ["PrefixIcon"],
+            "props": [{ "name": "prefixIcon", "typeInTheme": "icon" }],
+            "description": {
+              "textPart": { "text": "前缀图标", "desc": "前缀图标文本配置" }
+            }
+          },
+          {
+            "name": "后缀图标",
+            "path": ["SuffixIcon"],
+            "props": [{ "name": "suffixIcon", "typeInTheme": "icon" }],
+
+            "description": {
+              "textPart": { "text": "后缀图标", "desc": "后缀图标文本配置" }
             }
           }
         ]
@@ -65,7 +99,7 @@
         "data": [
           {
             "name": "未选中标签",
-            "path": ["TagWrap"],
+            "path": ["Container"],
             "props": [
               {
                 "name": "text",
@@ -85,6 +119,22 @@
                 "text": "文本",
                 "desc": "未选中标签文本配置"
               }
+            }
+          },
+          {
+            "name": "前缀图标",
+            "path": ["PrefixIcon"],
+            "props": [{ "name": "prefixIcon", "typeInTheme": "icon" }],
+            "description": {
+              "textPart": { "text": "前缀图标", "desc": "前缀图标文本配置" }
+            }
+          },
+          {
+            "name": "后缀图标",
+            "path": ["SuffixIcon"],
+            "props": [{ "name": "suffixIcon", "typeInTheme": "icon" }],
+            "description": {
+              "textPart": { "text": "后缀图标", "desc": "后缀图标文本配置" }
             }
           }
         ]

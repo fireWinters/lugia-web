@@ -89,6 +89,14 @@
       "type": "icon",
       "desc": "后缀图标类型"
     },
+    "transferButtonIcon": {
+      "type": "object",
+      "desc": "生成选择项的数据",
+      "meta": [
+        { "key": "transferLeftButtonIcon", "title": "左穿梭图标", "type": "icon" },
+        { "key": "transferRightButtonIcon", "title": "右穿梭图标", "type": "icon" }
+      ]
+    },
     "switchIconNames": {
       "type": "object",
       "desc": "生成选择项的数据",
@@ -102,7 +110,7 @@
       "desc": "穿梭框面板头部标题"
     }
   },
-  "event": {
+  "events": {
     "onSelectChange": {
       "desc": "Transfer 选中回调",
       "args": [
@@ -601,7 +609,7 @@
           "name": "穿梭框按钮样式",
           "desc": "为穿梭框配置按钮样式",
           "theme": {
-            "ButtonWrap": {
+            "Container": {
               "name": "按钮整体样式",
               "desc": "为按钮配置整体样式",
               "normal": [
@@ -1153,7 +1161,7 @@
       "name": "穿梭框按钮样式",
       "desc": "为穿梭框配置按钮样式",
       "theme": {
-        "ButtonWrap": {
+        "Container": {
           "name": "按钮整体样式",
           "desc": "为按钮配置整体样式",
           "normal": [

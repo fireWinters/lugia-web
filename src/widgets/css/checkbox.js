@@ -79,7 +79,7 @@ const getStyleCSS = (props: CheckBoxType): string => {
     `;
   }
   return `
-    display: inline-block;
+    display: inline-flex;
     margin-right: ${last ? 0 : em(get('marginToDifferentElement'))};
   `;
 };

@@ -40,14 +40,14 @@ export default class TransferMenu extends React.Component<TransferMenuProps, Tra
       direction,
       query,
       filterOption = (value, option) => {
-        return option[valueField].indexOf(value) > -1;
+        return option[valueField].indexOf(value) > -1 || option[displayField].indexOf(value) > -1;
       },
     } = props;
     let targetData = [];
     if (direction === 'Source') {
       targetData = getMenuDataByBlackList(data, valueField, blackList);
     } else {
-      const { mapData = {} } = state;
+      const mapData = getMapData(data, valueField) || {};
       ({ whiteListData: targetData } = getWhiteListDataAndCancelItem(
         mapData,
         displayValue,

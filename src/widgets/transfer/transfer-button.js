@@ -16,6 +16,7 @@ type TransferButtonProps = {
   leftModel: Object,
   rightModel: Object,
   theme: Object,
+  transferButtonIcon?: Object,
 };
 type TransferButtonState = {
   leftDisabled: boolean,
@@ -53,7 +54,7 @@ export default class TransferButton extends React.Component<
     const { viewClass, theme: buttonTheme } = theme;
     const defaultTheme = {
       [viewClass]: {
-        ButtonWrap: {
+        Container: {
           normal: {
             width: 38,
             padding: {
@@ -76,12 +77,18 @@ export default class TransferButton extends React.Component<
 
   render() {
     const { leftDisabled, rightDisabled } = this.state;
-    const { size } = this.props;
+    const {
+      size,
+      transferButtonIcon: {
+        transferLeftButtonIcon = 'lugia-icon-direction_right',
+        transferRightButtonIcon = 'lugia-icon-direction_Left',
+      } = {},
+    } = this.props;
     return (
       <OperationBtn>
         <Button
           size={size}
-          icon="lugia-icon-direction_right"
+          icon={transferLeftButtonIcon}
           onClick={this.handleClick('left')}
           type="primary"
           disabled={leftDisabled}
@@ -92,7 +99,7 @@ export default class TransferButton extends React.Component<
 
         <Button
           size={size}
-          icon="lugia-icon-direction_Left"
+          icon={transferRightButtonIcon}
           onClick={this.handleClick('right')}
           type="primary"
           disabled={rightDisabled}

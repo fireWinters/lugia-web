@@ -409,7 +409,8 @@
         ["border"],
         ["fontSize"],
         ["font"],
-        ["color"]
+        ["color"],
+        ["margin"]
       ],
       "hover": [],
       "active": []
@@ -418,6 +419,13 @@
       "name": "步长箭头图标分割线",
       "desc": "步长箭头图标分割线",
       "normal": [["border", "top"]]
+    }
+  },
+  "defaultTheme": {
+    "Container": {
+      "normal": {
+        "width": 250
+      }
     }
   }
 }

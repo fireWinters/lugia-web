@@ -193,6 +193,17 @@ const InputDemo = () => {
       InputSuffix: { normal: { fontSize: 14 } },
     },
   };
+  const innerValidateConfig = {
+    [Widget.Input]: {
+      ValidateErrorText: {
+        normal: {
+          margin: {
+            right: 20,
+          },
+        },
+      },
+    },
+  };
   const onChange = (cmpName: string) => (value: any) => {};
   const formatter = value => {
     return `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -266,6 +277,8 @@ const InputDemo = () => {
         <Input validateType="bottom" validateStatus="error" />
         <p>校验信息显示类型 inner 输入值 受限校验 </p>
         <Input validateType="inner" validateStatus="error" />
+        <p>校验信息显示类型 inner 展示提示信息 配置margin</p>
+        <Input theme={innerValidateConfig} validateType="inner" validateStatus="error" />
       </Wrapper>
       <Wrapper>
         <p>段落文本输入框 resizeType="horizontal" </p>
@@ -303,6 +316,17 @@ const InputDemo = () => {
             this.textareaFocus = focus;
           }}
         />
+        <br /> <br />
+        <p>验证textArea 100%没生效问题</p>
+        <Theme
+          config={{
+            [Widget.Textarea]: {
+              Container: { normal: { width: '100%', height: 100 } },
+            },
+          }}
+        >
+          <Textarea placeholder={'请填写内容'} />
+        </Theme>
       </Wrapper>
       <Wrapper>
         <p>校验信息显示类型 top 输入值 是否含有a</p>

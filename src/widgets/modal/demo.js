@@ -12,6 +12,12 @@ import Select from '../select';
 import Theme from '../theme';
 import Widgets from '../consts';
 import { getBorderRadius } from '../theme/CSSProvider';
+import styled from 'styled-components';
+
+const BlankBox = styled.div`
+  height: 1200px;
+  background: #ccc;
+`;
 
 const Text = (props: Object) => {
   return <div>{props.text}</div>;
@@ -45,6 +51,7 @@ class ModalBox extends React.Component<any, any> {
 
   render() {
     const { visable } = this.state;
+    const { mountBody } = this.props;
     return (
       <div style={{ position: 'absolute', bottom: '30px', right: '30px' }}>
         <Button onClick={this.click}>弹出</Button>
@@ -53,6 +60,7 @@ class ModalBox extends React.Component<any, any> {
           title="另一个对话框！"
           onOk={this.buttonClick}
           onCancel={this.buttonClick}
+          mountBody={mountBody}
         >
           <div style={{ width: '100px', height: '300px' }}>我也是一个对话框</div>
         </Modal>
@@ -65,15 +73,34 @@ export default class ModalDemo extends React.Component<any, any> {
   constructor() {
     super();
     this.state = {
-      visable1: false,
-      visable2: false,
-      visable3: false,
-      visable4: false,
-      visable5: false,
-      visable6: false,
-      visable7: false,
-      visable8: false,
       buttonValue: 'testValue',
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const { visible = false, mountBody = true } = props;
+    const {
+      visable1,
+      visable2,
+      visable3,
+      visable4,
+      visable5,
+      visable6,
+      visable7,
+      visable8,
+      visable9,
+    } = state;
+    return {
+      mountBody,
+      visable1: visable1 || visible,
+      visable2: visable2 || visible,
+      visable3: visable3 || visible,
+      visable4: visable4 || visible,
+      visable5: visable5 || visible,
+      visable6: visable6 || visible,
+      visable7: visable7 || visible,
+      visable8: visable8 || visible,
+      visable9: visable9 || visible,
     };
   }
 
@@ -115,8 +142,10 @@ export default class ModalDemo extends React.Component<any, any> {
       visable6,
       visable7,
       visable8,
+      visable9,
       confirmLoading,
       buttonValue,
+      mountBody,
     } = this.state;
     const view = {
       [Widgets.Modal]: {
@@ -202,6 +231,7 @@ export default class ModalDemo extends React.Component<any, any> {
             title="这是标题！"
             onOk={this.buttonClick(7)}
             onCancel={this.buttonClick(7)}
+            mountBody={mountBody}
           >
             这是内容！
           </Modal>
@@ -219,6 +249,7 @@ export default class ModalDemo extends React.Component<any, any> {
           cancelButtonProps={{ type: 'danger' }}
           closable={true}
           zIndex={99999}
+          mountBody={mountBody}
         >
           这是内容！
         </Modal>
@@ -230,8 +261,9 @@ export default class ModalDemo extends React.Component<any, any> {
           title="这是标题！"
           onOk={this.buttonClick(1)}
           onCancel={this.buttonClick(1)}
+          mountBody={mountBody}
         >
-          <ModalBox />
+          <ModalBox mountBody={mountBody} />
         </Modal>
         <br />
         <br />
@@ -242,6 +274,7 @@ export default class ModalDemo extends React.Component<any, any> {
           onOk={this.loadingClick(2)}
           onCancel={this.buttonClick(2)}
           title="这是标题！"
+          mountBody={mountBody}
         >
           这是内容！
         </Modal>
@@ -259,6 +292,7 @@ export default class ModalDemo extends React.Component<any, any> {
           ]}
           onCancel={this.buttonClick(3)}
           title="这是标题！"
+          mountBody={mountBody}
         >
           这是内容！
         </Modal>
@@ -275,6 +309,7 @@ export default class ModalDemo extends React.Component<any, any> {
                 type: 'success',
               },
               iconClass: 'lugia-icon-direction_arrow_right',
+              mountBody,
             })
           }
         >
@@ -282,41 +317,59 @@ export default class ModalDemo extends React.Component<any, any> {
         </Button>
         <br />
         <br />
-        <Button onClick={() => Modal.info({ title: 'info', content: 'this info text!' })}>
+        <Button
+          onClick={() => Modal.info({ title: 'info', content: 'this info text!', mountBody })}
+        >
           info
         </Button>
         <br />
         <br />
-        <Button onClick={() => Modal.success({ title: 'success', content: 'this success text!' })}>
+        <Button
+          onClick={() =>
+            Modal.success({ title: 'success', content: 'this success text!', mountBody })
+          }
+        >
           success
         </Button>
         <br />
         <br />
-        <Button onClick={() => Modal.error({ title: 'error', content: 'this error text!' })}>
+        <Button
+          onClick={() => Modal.error({ title: 'error', content: 'this error text!', mountBody })}
+        >
           error
         </Button>
         <br />
         <br />
-        <Button onClick={() => Modal.createShowModal({ title: 'warning', component: Text })()}>
+        <Button
+          onClick={() => Modal.createShowModal({ title: 'warning', component: Text, mountBody })()}
+        >
           warning
         </Button>
 
         <Button
           onClick={() =>
-            Modal.createShowModal({ title: 'warning', component: Text, footer: false })({
+            Modal.createShowModal({
+              title: 'warning',
+              component: Text,
+              footer: false,
+              mountBody,
+            })({
               text: 'hello world',
             })
           }
         >
           createModal
         </Button>
-        <Select
-          canSearch
-          canClear={false}
-          displayField={'label'}
-          data={data}
-          onTrigger={this.Click(4)}
-        />
+
+        {mountBody ? (
+          <Select
+            canSearch
+            canClear={false}
+            displayField={'label'}
+            data={data}
+            onTrigger={this.Click(4)}
+          />
+        ) : null}
 
         <br />
         <br />
@@ -326,9 +379,25 @@ export default class ModalDemo extends React.Component<any, any> {
           title="这是标题！"
           onOk={this.buttonClick(8)}
           onCancel={this.buttonClick(8)}
-          mountBody={true}
+          mountBody={mountBody}
         >
           <button onClick={this.handleTestButtonClick}>{buttonValue}</button>
+        </Modal>
+
+        <br />
+        <br />
+        <Button onClick={this.Click(9)}>对话框高度超出窗口时,可以滚动</Button>
+        <Modal
+          visible={visable9}
+          title="这是标题！"
+          onOk={this.buttonClick(9)}
+          onCancel={this.buttonClick(9)}
+          mountBody={mountBody}
+        >
+          这是内容！
+          <p>一段描述</p>
+          <BlankBox />
+          <p>另一段描述</p>
         </Modal>
       </div>
     );

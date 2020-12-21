@@ -239,13 +239,16 @@ function hasValueProps(props: Object) {
 }
 
 function getOverMax(value, max) {
-  return Number(value) >= max;
+  return parseFloat(value) >= max;
 }
 
 function getBelowMin(value, min) {
-  return Number(value) <= min;
+  return parseFloat(value) <= min;
 }
 
+function handleFirstPoint(value: string | number) {
+  return value === '.' ? '' : value;
+}
 function handleEmpty(value, handleValue) {
   return value === '' ? '' : handleValue;
 }
@@ -289,12 +292,14 @@ const iconDefaultTheme = (viewClass: string) => {
     },
   };
 };
+export const maxSafeNumber = Number.MAX_SAFE_INTEGER;
+export const minSafeNumber = Number.MIN_SAFE_INTEGER;
 
 class NumberTextBox extends Component<NumberInputProps, NumberInputState> {
   static defaultProps = {
     disabled: false,
-    max: Infinity,
-    min: -Infinity,
+    max: maxSafeNumber,
+    min: minSafeNumber,
     viewClass: Widget.NumberInput,
     size: 'default',
     precision: 0,
@@ -544,7 +549,7 @@ class NumberTextBox extends Component<NumberInputProps, NumberInputState> {
     const value = event.newValue;
     const { value: sValue } = this.state;
     const handleNumberValue = checkNumber(value + '');
-    const theValue = handleEmpty(value, handleNumberValue);
+    const theValue = handleFirstPoint(handleNumberValue);
     if (sValue !== handleNumberValue) {
       this.setValue(theValue, event);
     }
@@ -553,8 +558,13 @@ class NumberTextBox extends Component<NumberInputProps, NumberInputState> {
   setValue(value: number, event: any): void {
     const oldValue = this.state.value;
     const { disabled, onChange } = this.props;
-    const theNewValue = handleEmpty(value, Number(value));
-    const param = { newValue: theNewValue, oldValue, event };
+    const theNewValue = handleEmpty(value, parseFloat(value));
+    const theOldValue = handleEmpty(oldValue, parseFloat(oldValue));
+    const param = {
+      newValue: theNewValue,
+      oldValue: theOldValue,
+      event,
+    };
     if (hasValueProps(this.props) === false) {
       if (disabled) {
         return;
@@ -571,10 +581,12 @@ class NumberTextBox extends Component<NumberInputProps, NumberInputState> {
     const { precision } = this.props;
     let { value } = this.state;
     let { step, min, max } = this.props;
-    value = Number(value);
-    step = click === 'plus' ? Number(step) : step * -1;
-    const finalValue = accAdd(value, step, precision);
-    this.setValue(limit(finalValue, [min, max]), event);
+    if (value !== '') {
+      value = parseFloat(value);
+      step = click === 'plus' ? parseFloat(step) : step * -1;
+      const finalValue = accAdd(value, step, precision);
+      this.setValue(limit(finalValue, [min, max]), event);
+    }
   }
 }
 

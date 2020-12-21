@@ -66,7 +66,7 @@ const getButtonCSS = (props: GroupCSSProps) => {
   const { childType = 'default' } = props;
   if (childType === 'button') {
     return `& > label:first-child > span {
-      ${getFirstChildBorder(props)}; 
+      ${getFirstChildBorder(props)};
       border-radius: ${px2remcss(borderRadiusValue)} 0 0 ${px2remcss(borderRadiusValue)};
     }
     & > label:last-child > span {
